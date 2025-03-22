@@ -18,13 +18,11 @@ import ShoppingCheckout from "./pages/shopping-view/checkout";
 
 import NotFound from "./pages/notFound";
 import CheckAuth from "./components/common/check-auth";
+import UnauthPage from "./pages/unauth-page";
 
 const App = () => {
-  const isAuthenticated = true;
-  const user ={
-    name:'aashish',
-    role:'admin'
-  }
+  const isAuthenticated = false;
+  const user = null;
 
   return (
     <div className="flex flex-col overflow-hidden bg-white">
@@ -72,6 +70,8 @@ const App = () => {
         </Route>
 
         <Route path="*" element={<NotFound />} />
+        <Route path="/unauth-page" element={<UnauthPage />} />
+
       </Routes>
     </div>
   );
