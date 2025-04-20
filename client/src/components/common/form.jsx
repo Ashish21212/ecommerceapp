@@ -29,6 +29,7 @@ const CommonForm = ({
             onChange={event => setFormData({
               ...formData,
               [getcontrolItem.name] : event.target.value
+              
             })}
           />
         );
@@ -92,10 +93,11 @@ const CommonForm = ({
       <div className="flex flex-col gap-3">
         {formControls.map((controlItem) => (
           
+          
           <div className="grid w-full gap-1.5" key={controlItem.name}>
             <label className="mb-1">{controlItem.label}</label>
             {renderInputsByComponentType(controlItem)}
-            {/* {console.log(controlItem.label)} */}
+            {/* {console.log(controlItem)} */}
           </div>
         ))}
         
