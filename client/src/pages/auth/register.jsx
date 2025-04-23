@@ -5,7 +5,7 @@ import { Link,useNavigate } from "react-router-dom";
 import CommonForm from "../../components/common/form";
 import { registerFormControl } from "../../config/config";
 import { registerUser } from '../../store/auth-slice/'
-
+import { toast } from "sonner";
 
 
 const initialState = {
@@ -18,13 +18,35 @@ const AuthRegister = () => {
   const [formData, setFormData] = useState(initialState);
   const dispatch = useDispatch();
   const navigate = useNavigate();
+  
+
   const onSubmit = (e) => {
    e.preventDefault()
    dispatch(registerUser(formData))
-   .then(()=>navigate('/auth/login'))
-
-  }
-  console.log(formData);
+  
+   .then((data)=>{
+    
+    if(data?.payload?.success){
+      navigate('/auth/login')
+      toast.success(data?.payload?.message, {
+        style: {
+          background: 'green',
+          color: 'white',
+        }
+      });
+    }else
+    {
+      toast.success(data?.payload?.message, {
+        style: {
+          background: 'red',
+          color: 'white',
+        }
+      });
+    }
+    console.log(data)
+   })
+}
+  // console.log(formData);
  
   return (
     <div className="mx-auto w-full max-w-md space-y-6">

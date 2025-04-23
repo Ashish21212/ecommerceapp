@@ -20,9 +20,26 @@ import NotFound from "./pages/notFound";
 import CheckAuth from "./components/common/check-auth";
 import UnauthPage from "./pages/unauth-page";
 
+import { checkAuth } from "./store/auth-slice";
+
+import { useEffect } from "react";
+import { useDispatch, useSelector } from "react-redux";
+
+
 const App = () => {
-  const isAuthenticated = false;
-  const user = null;
+
+
+  const {user, isAuthenticated, isLoading} = useSelector((state) => state.auth);
+  const dispatch = useDispatch();
+
+  useEffect(() => {
+     dispatch(checkAuth())
+      
+  },[dispatch])
+
+  if(isLoading){
+    return <div>Loading...</div>
+  }
 
   return (
     <div className="flex flex-col overflow-hidden bg-white">
