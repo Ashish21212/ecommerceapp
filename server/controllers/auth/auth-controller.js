@@ -43,6 +43,7 @@ const loginUser = async (req, res) => {
 
   try {
     const checkUser = await User.findOne({ email });
+    console.log(checkUser);
     if (!checkUser) {
       return res.json({
         success: false,
@@ -64,7 +65,7 @@ const loginUser = async (req, res) => {
         email: checkUser.email,
       },
       "CLIENT_SECRET_KEY",
-      { expiresIn: "10m" }
+      { expiresIn: "60m" }
     );
 
     res
