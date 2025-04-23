@@ -3,7 +3,7 @@ import axios from "axios";
 
 const initialState = {
   isAuthenticated: false,
-  isLoading: false,
+  isLoading: true,
   user: null,
 };
 
@@ -17,6 +17,7 @@ export const registerUser = createAsyncThunk(
         withCredentials: true,
       }
     );
+    // console.log(response)
     return response.data;
   }
 );
