@@ -39,13 +39,15 @@ const CommonForm = ({
         element = (
           <Select
             onValueChange={(value) =>
+          
               setFormData({
                 ...formData,
                 [getcontrolItem.name]: value,
               })
             }
             value={value}
-          >
+              >
+              {/* {console.log(value)} */}
             <SelectTrigger className="w-full">
               <SelectValue placeholder={getcontrolItem.label} />
             </SelectTrigger>
@@ -53,6 +55,7 @@ const CommonForm = ({
               {getcontrolItem.options && getcontrolItem.options.length > 0
                 ? getcontrolItem.options.map((optionItem) => (
                     <SelectItem key={optionItem.id} value={optionItem.id}>
+                    
                       {optionItem.label}
                     </SelectItem>
                   ))

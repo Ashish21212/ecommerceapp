@@ -58,7 +58,6 @@ export const addProductFormElements = [
     label:'Description',
     name:'description',
     componentType:'textarea',
-  
     placeholder:'Enter product description',
   },
 

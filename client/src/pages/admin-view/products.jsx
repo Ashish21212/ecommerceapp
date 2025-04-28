@@ -6,6 +6,7 @@ import { useState } from 'react'
 import { SheetContent, SheetHeader, SheetTitle } from '../../components/ui/sheet'
 import CommonForm from '../../components/common/form'
 import { addProductFormElements } from '../../config/config'
+import ProductImageUpload from '../../components/admin-view/image-upload'
 
 const initialFormData = {
   image: null,
@@ -22,6 +23,8 @@ const initialFormData = {
 function AdminProducts() {
   const [openCreateProductsDialog, setOpenCreateProductsDialog] = useState(false);
   const [formData, setFormData] = useState(initialFormData);
+  const [imageFile, setImageFile] = useState(null);
+  const [uploadedImageUrl, setUploadedImageUrl] = useState(null);
 
   const onSubmit = (data) =>{
 
@@ -40,6 +43,12 @@ function AdminProducts() {
             Add New Product
           </SheetTitle>
          </SheetHeader> 
+         <ProductImageUpload 
+          imageFile={imageFile}
+          setImageFile={setImageFile}
+          uploadedImageUrl={uploadedImageUrl}
+          setUploadedImageUrl={setUploadedImageUrl}
+         />
          <div className='py-6'>
           <CommonForm
             formData={formData}
