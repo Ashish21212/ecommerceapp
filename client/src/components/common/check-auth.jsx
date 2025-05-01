@@ -4,6 +4,7 @@ import { Navigate } from "react-router-dom";
 
 const CheckAuth = ({ isAuthenticated, user, children }) => {
   const location = useLocation();
+  // console.log(location.pathname);
 
   // console.log(location.pathname, isAuthenticated,user )
 

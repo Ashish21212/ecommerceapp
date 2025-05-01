@@ -11,6 +11,8 @@ const CommonForm = ({
   setFormData,
   onSubmit,
   buttonText,
+  isBtnDisabled,
+  
 }) => {
   const renderInputsByComponentType = (getcontrolItem) => {
     // console.log(getcontrolItem);
@@ -112,7 +114,7 @@ const CommonForm = ({
           </div>
         ))}
       </div>
-      <Button type="submit" className="mt-2 w-full">
+      <Button disabled={isBtnDisabled} type="submit" className="mt-2 w-full cursor-pointer">
         {buttonText || "Submit"}
       </Button>
     </form>

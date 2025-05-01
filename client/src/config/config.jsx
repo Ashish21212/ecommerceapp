@@ -116,3 +116,44 @@ options: [
   },
 ]
 
+//For shop
+
+export const shoppingViewHeaderMenuItems = [
+  {
+    id:'home',
+    label:'home',
+    path: '/shop/home'
+
+  },
+  {
+    id:'men',
+    label:'Men',
+    path: '/shop/listing'
+
+  },
+  {
+    id:'women',
+    label:'Women',
+    path: '/shop/listing'
+
+  },
+  {
+    id:'kids',
+    label:'Kids',
+    path: '/shop/listing'
+
+  },
+
+  {
+    id:'footwear',
+    label:'Footwear',
+    path: '/shop/listing'
+
+  },
+  {
+    id:'acccessories',
+    label:'Accessories',
+    path: '/shop/listing'
+
+  },
+]
