@@ -5,7 +5,7 @@ const cors = require('cors')
 const authRouter = require('./routes/auth-routes')
 const AdminProductsRouter = require('./routes/admin/products-routes')
 
-mongoose.connect
+ mongoose.connect
 ('mongodb+srv://acpaashish44:bB3bJwoGfvVQdaqL@ecommerce.qcbtj.mongodb.net/')
 .then(()=>console.log('Database Connected'))
 .catch(err=>console.log(err))
