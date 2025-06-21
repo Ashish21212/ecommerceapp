@@ -1,11 +1,12 @@
 const cloudinary = require('cloudinary').v2;
 const multer = require('multer');
 
+
 // connecting your Node.js app to your Cloudinary account.
 cloudinary.config({
-  cloud_name : 'dpfyjdenu',
-  api_key :'671111877368923',
-  api_secret : '9L2YyW2DSZwgLpnXpDobhJBgAV8',
+  cloud_name : 'raktasetu',
+  api_key :'776313542864231',
+  api_secret : 'okZgvYHxVYBD0sE-e5oOgQ5xrGk',
 
 });
 

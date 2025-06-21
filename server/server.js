@@ -4,6 +4,7 @@ const cookieParser = require('cookie-parser')
 const cors = require('cors')
 const authRouter = require('./routes/auth-routes')
 const AdminProductsRouter = require('./routes/admin/products-routes')
+const shopProductsRouter = require('./routes/shop/products-routes')
 
  mongoose.connect
 ('mongodb+srv://acpaashish44:bB3bJwoGfvVQdaqL@ecommerce.qcbtj.mongodb.net/')
@@ -16,7 +17,7 @@ const PORT = process.env.PORT || 5000;
 
 app.use(
   cors({
-    origin: ["http://localhost:5173"],
+    origin: ["http://localhost:5174"],
     methods: ["GET", "POST", "PUT", "DELETE"],
     allowedHeaders: [ 
       "Content-Type",
@@ -32,4 +33,5 @@ app.use(cookieParser());
 app.use(express.json());
 app.use('/api/auth',authRouter)
 app.use('/api/admin/products',AdminProductsRouter)
+app.use('/api/shop/products',shopProductsRouter)
 app.listen(PORT,()=> console.log("Server is running on port",PORT))

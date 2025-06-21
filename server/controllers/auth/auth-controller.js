@@ -9,7 +9,7 @@ const registerUser = async (req, res) => {
   try {
     const checkUser = await User.findOne({ email });
     if (checkUser) {
-      return res.json({
+      return res.status(401).json({
         success: false,
         message: "User Already Exists",
         
@@ -45,14 +45,14 @@ const loginUser = async (req, res) => {
     const checkUser = await User.findOne({ email });
     console.log(checkUser);
     if (!checkUser) {
-      return res.json({
+      return res.status(401).json({ 
         success: false,
         message: "User Not Found",
       });
     }
     const checkPassword = await bcrypt.compare(password, checkUser.password);
     if (!checkPassword) {
-      return res.json({
+      return res.status(401).json({
         success: false,
         message: "Invalid Password",
       });
@@ -92,7 +92,7 @@ const loginUser = async (req, res) => {
     });
   }
 };
-
+// Logout
 const logoutUser =async(req,res)=>{
   res.clearCookie('token').json({
     success: true,
