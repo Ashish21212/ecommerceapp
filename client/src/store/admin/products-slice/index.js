@@ -58,7 +58,7 @@ extraReducers: (builder) => {
 
    })
    .addCase(fetchAllProducts.fulfilled, (state, action) => {
-    console.log(action.payload.data, "action.payload")
+    // console.log(action.payload.data, "action.payload")
     state.isLoading = false;
     state.productList = action.payload.data;
    })

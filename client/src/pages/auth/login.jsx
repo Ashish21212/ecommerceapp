@@ -24,7 +24,7 @@ const AuthLogin = () => {
           if(data?.payload?.success) {
            toast.success(data?.payload?.message)
           }else{
-            toast.success(data?.payload?.message)
+            toast.error(data?.payload?.message);
           }
             
       })

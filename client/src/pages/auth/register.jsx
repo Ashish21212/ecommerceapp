@@ -27,20 +27,12 @@ const AuthRegister = () => {
    .then((data)=>{
     
     if(data?.payload?.success){
-      navigate('/auth/login')
-      toast.success(data?.payload?.message, {
-        style: {
-          background: 'green',
-          color: 'white',
-        }
-      });
+    toast.success(data?.payload?.message);
+     navigate('/auth/login')
     }else
     {
-      toast.success(data?.payload?.message, {
-        style: {
-          background: 'red',
-          color: 'white',
-        }
+      toast.error(data?.payload?.message, {
+       
       });
     }
     // console.log(data)
