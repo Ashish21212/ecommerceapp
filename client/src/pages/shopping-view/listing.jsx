@@ -11,9 +11,10 @@ import { Button } from "../../components/ui/button";
 import { ArrowUpDownIcon } from "lucide-react";
 import { sortOptions } from "../../config/config";
 import { useDispatch, useSelector } from "react-redux";
-import { fetchAllFilteredProducts } from "../../store/shop/products-slice";
+import { fetchAllFilteredProducts, fetchProductDetails } from "../../store/shop/products-slice";
 import ShoppingProductTile from "../../components/shopping-view/product-tile";
 import { useSearchParams } from "react-router-dom";
+import ProductDetailsDialog from "../../components/shopping-view/product-details";
 
 // import { getFilteredProducts } from "../../store/product-slice";
 
@@ -33,22 +34,23 @@ function createSearchParamsHelper(filterParams){
 function ShoppingListing() {
   // fetching list of product
   const dispatch = useDispatch();
-  const { products } = useSelector((state) => state.shopProducts);
+  const { products, productDetails } = useSelector((state) => state.shopProducts);
   // console.log(products, "hello");
   const [filters, setFilters] = useState({});
   // console.log(filters,'jj')
   const [sort, setSort] = useState(null);
   const [searchParams, setSearchParams] = useSearchParams()
+  const [openDetailsDialog, setOpenDetailsDialog] = useState(false)
 
 
 
   function handleSort(value) {
-    console.log(value, "value");
+    // console.log(value, "value");
     setSort(value);
   }
 
  function handleFilter(getSectionId, getCurrentOptions) {
-  console.log(getSectionId, getCurrentOptions, "getSectionId");
+  // console.log(getSectionId, getCurrentOptions, "getSectionId");
   let cpyFilters = { ...filters };
  
   const indexOfCurrentSection = Object.keys(cpyFilters).indexOf(getSectionId);
@@ -71,9 +73,14 @@ function ShoppingListing() {
     }
   }
    
- console.log(cpyFilters,'fsggg');
+//  console.log(cpyFilters,'fsggg');
  setFilters(cpyFilters);
  sessionStorage.setItem('filters',JSON.stringify(cpyFilters))
+ }
+
+ function handleGetProductDetails(getCurrentProductId){
+  // console.log(getCurrentProductId,'details' )
+  dispatch(fetchProductDetails(getCurrentProductId))
  }
 
  useEffect(()=>{
@@ -93,7 +100,14 @@ function ShoppingListing() {
     dispatch(fetchAllFilteredProducts({filterParams : filters,sortParams: sort}));
   }, [dispatch,sort,filters]);
 
-console.log(filters, searchParams,'filters')
+  useEffect(()=>{
+    if(productDetails !==null)
+    {
+      setOpenDetailsDialog(true)
+    }
+  },[productDetails])
+
+console.log(productDetails,'filters')
 
   return (
     <>
@@ -133,14 +147,23 @@ console.log(filters, searchParams,'filters')
           <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4  gap-4 p-4">
             {products && products.length > 0 ? (
               products.map((productItem) => (
-                <ShoppingProductTile product={productItem} />
+                <ShoppingProductTile 
+                product={productItem}
+                handleGetProductDetails={handleGetProductDetails}
+                 />
               ))
             ) : (
               <p>No products found.</p>
             )}
             {/* {console.log(productList, "product list")} */}
           </div>
+        
         </div>
+        <ProductDetailsDialog
+          open={openDetailsDialog}
+          setOpen={setOpenDetailsDialog}
+          productDetails={productDetails}
+        />
       </div>
     </>
   );

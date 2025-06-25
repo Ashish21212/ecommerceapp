@@ -4,11 +4,11 @@ import { Badge } from '../ui/badge'
 import { Button } from '../ui/button'
 import { categoryOptionsMap, brandOptionsMap } from '../../config/config'
 
-const ShoopingProductTile = ({product}) => {
+const ShoopingProductTile = ({product,handleGetProductDetails}) => {
   return (
     <>
       <Card className='w-full max-w-sm mx-auto'>
-      <div>
+      <div onClick={()=>handleGetProductDetails(product?._id)}>
         <div className='relative'>
         <img
          src={product?.image} 
