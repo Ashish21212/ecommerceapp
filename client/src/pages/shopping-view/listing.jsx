@@ -15,6 +15,8 @@ import { fetchAllFilteredProducts, fetchProductDetails } from "../../store/shop/
 import ShoppingProductTile from "../../components/shopping-view/product-tile";
 import { useSearchParams } from "react-router-dom";
 import ProductDetailsDialog from "../../components/shopping-view/product-details";
+import { addToCart, fetchCartItems } from "../../store/shop/cart-slice";
+import {toast} from 'sonner'
 
 // import { getFilteredProducts } from "../../store/product-slice";
 
@@ -36,6 +38,7 @@ function ShoppingListing() {
   const dispatch = useDispatch();
   const { products, productDetails } = useSelector((state) => state.shopProducts);
   // console.log(products, "hello");
+  const {user} = useSelector(state=>state.auth)
   const [filters, setFilters] = useState({});
   // console.log(filters,'jj')
   const [sort, setSort] = useState(null);
@@ -83,6 +86,17 @@ function ShoppingListing() {
   dispatch(fetchProductDetails(getCurrentProductId))
  }
 
+ function handleAddToCart(getCurrentProductId){
+   console.log(getCurrentProductId,'getidproduct')
+   dispatch(addToCart({userId : user?.id,productId:getCurrentProductId,quantity:1}))
+   .then(data=>{
+    if(data?.payload?.success){
+      dispatch(fetchCartItems(user?.id))
+     toast.success('Product added to cart')
+    }
+   })
+ }
+
  useEffect(()=>{
   setSort('price-lowtohigh')
   setFilters(JSON.parse(sessionStorage.getItem('filters')) || {})
@@ -107,7 +121,6 @@ function ShoppingListing() {
     }
   },[productDetails])
 
-console.log(productDetails,'filters')
 
   return (
     <>
@@ -150,6 +163,7 @@ console.log(productDetails,'filters')
                 <ShoppingProductTile 
                 product={productItem}
                 handleGetProductDetails={handleGetProductDetails}
+                handleAddToCart={handleAddToCart}
                  />
               ))
             ) : (

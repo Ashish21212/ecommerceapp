@@ -4,7 +4,7 @@ import { Badge } from '../ui/badge'
 import { Button } from '../ui/button'
 import { categoryOptionsMap, brandOptionsMap } from '../../config/config'
 
-const ShoopingProductTile = ({product,handleGetProductDetails}) => {
+const ShoopingProductTile = ({product,handleGetProductDetails, handleAddToCart}) => {
   return (
     <>
       <Card className='w-full max-w-sm mx-auto'>
@@ -47,13 +47,13 @@ const ShoopingProductTile = ({product,handleGetProductDetails}) => {
             ) : null}
           </div>
         </CardContent>
-        <CardFooter>
-          <Button className='w-full'>
+      
+      </div>
+  <CardFooter>
+          <Button onClick={()=>handleAddToCart(product?._id)} className='w-full'>
             Add to cart
           </Button>
         </CardFooter>
-      </div>
-
       </Card>
     </>
   )
