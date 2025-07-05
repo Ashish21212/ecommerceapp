@@ -5,6 +5,8 @@ const cors = require('cors')
 const authRouter = require('./routes/auth-routes')
 const AdminProductsRouter = require('./routes/admin/products-routes')
 const shopProductsRouter = require('./routes/shop/products-routes')
+const shopCartRouter = require('./routes/shop/cart-routes')
+
 
  mongoose.connect
 ('mongodb+srv://acpaashish44:bB3bJwoGfvVQdaqL@ecommerce.qcbtj.mongodb.net/')
@@ -34,4 +36,5 @@ app.use(express.json());
 app.use('/api/auth',authRouter)
 app.use('/api/admin/products',AdminProductsRouter)
 app.use('/api/shop/products',shopProductsRouter)
+app.use('/api/shop/cart', shopCartRouter)
 app.listen(PORT,()=> console.log("Server is running on port",PORT))
