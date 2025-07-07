@@ -10,63 +10,103 @@ import {
   ChevronLeftIcon,
   ChevronRightIcon,
   CloudLightning,
- 
   Footprints,
   Leaf,
-  Lectern,
-  MoveRightIcon,
-  Shirt,
+ 
   ShirtIcon,
   ShoppingBag,
   Square,
   TicketIcon,
   UmbrellaIcon,
-  
   WatchIcon,
 } from "lucide-react";
 import { Card, CardContent } from "../../components/ui/card";
 import { useDispatch, useSelector } from "react-redux";
-import { fetchAllFilteredProducts } from "../../store/shop/products-slice";
+import { fetchAllFilteredProducts, fetchProductDetails } from "../../store/shop/products-slice";
 import ShoopingProductTile from "../../components/shopping-view/product-tile";
+import { useNavigate } from "react-router-dom";
+import { addToCart } from "../../store/shop/cart-slice";
+import { fetchCartItems } from "../../store/shop/cart-slice";
+import { toast } from "sonner";
+import ProductDetailsDialog from "../../components/shopping-view/product-details";
+
 const categoriesWithIcon = [
-    { id: "men", label: "Men", icon: ShirtIcon },
-    { id: "women", label: "Women", icon: CloudLightning },
-    { id: "kids", label: "Kids", icon: BabyIcon },
-    { id: "accessories", label: "Accessories", icon: WatchIcon },
-    { id: "footwear", label: "Footwear", icon: UmbrellaIcon },
-  ];
+  { id: "men", label: "Men", icon: ShirtIcon },
+  { id: "women", label: "Women", icon: CloudLightning },
+  { id: "kids", label: "Kids", icon: BabyIcon },
+  { id: "accessories", label: "Accessories", icon: WatchIcon },
+  { id: "footwear", label: "Footwear", icon: UmbrellaIcon },
+];
 const brandsWithIcon = [
-  
-      {id:'nike', label:'Nike', icon:TicketIcon},
-      {id:'adidas', label:'Adidas',icon:Footprints},
-      {id:'puma', label:'Puma',icon:Bird},
-      {id:'levis', label:'Levis',icon:ShoppingBag},
-      {id:'zara', label:'Zara',icon:Leaf},
-      {id:'h&m', label:'H&M',icon:Square},
-
-
-    ]
+  { id: "nike", label: "Nike", icon: TicketIcon },
+  { id: "adidas", label: "Adidas", icon: Footprints },
+  { id: "puma", label: "Puma", icon: Bird },
+  { id: "levis", label: "Levis", icon: ShoppingBag },
+  { id: "zara", label: "Zara", icon: Leaf },
+  { id: "h&m", label: "H&M", icon: Square },
+];
 function ShoppingHome() {
   const [currentSlide, setCurrentSlide] = useState(0);
   // const {productList} = useSelector((state) => state.shopProducts);
-  const {products} = useSelector((state) => state.shopProducts);
+  const { products, productDetails } = useSelector((state) => state.shopProducts);
+  const { user } = useSelector((state) => state.auth);
+    const [openDetailsDialog, setOpenDetailsDialog] = useState(false)
+  
 
-  const dispatch = useDispatch()
+  const dispatch = useDispatch();
+  const navigate = useNavigate();
 
   const slides = [bannerOne, bannerTwo, bannerThree];
 
-  useEffect(()=>{
-   const timer = setInterval(()=>{
-    setCurrentSlide((prevSlide) => (prevSlide + 1) % slides.length);
-   }, 3000)
+  function handleNavigateToListingPage(getCurrentItem, section) {
+      sessionStorage.removeItem('filters');
+      const currentFilters = {
+        [section] : [getCurrentItem.id]
+      }
+      sessionStorage.setItem('filters', JSON.stringify(currentFilters));
+      navigate('/shop/listing')
+  }
+
+   function handleGetProductDetails(getCurrentProductId){
+    // console.log(getCurrentProductId,'details' )
+    dispatch(fetchProductDetails(getCurrentProductId))
+   }
+
+    function handleAddToCart(getCurrentProductId){
+   console.log(getCurrentProductId,'getidproduct')
+   dispatch(addToCart({userId : user?.id,productId:getCurrentProductId,quantity:1}))
+   .then(data=>{
+    if(data?.payload?.success){
+      dispatch(fetchCartItems(user?.id))
+     toast.success('Product added to cart')
+    }
+   })
+ }
+ 
+   useEffect(()=>{
+     if(productDetails !==null)
+     {
+       setOpenDetailsDialog(true)
+     }
+   },[productDetails])
+ 
+
+  useEffect(() => {
+    const timer = setInterval(() => {
+      setCurrentSlide((prevSlide) => (prevSlide + 1) % slides.length);
+    }, 3000);
 
     return () => clearInterval(timer);
-  
-  },[])
+  }, []);
 
-  useEffect(()=>{
-  dispatch(fetchAllFilteredProducts({filterParams: {},sortParams:'price-lowtohigh'}))
-  },[dispatch])
+  useEffect(() => {
+    dispatch(
+      fetchAllFilteredProducts({
+        filterParams: {},
+        sortParams: "price-lowtohigh",
+      })
+    );
+  }, [dispatch]);
 
   console.log(products, "productList");
   return (
@@ -77,7 +117,9 @@ function ShoppingHome() {
             <img
               key={index}
               src={slide}
-              className={`${index === currentSlide ? 'opacity-100': 'opacity-0' } absolute top-0 left-0 w-full h-full  object-cover object-center transition-opacity duration-1000 `}
+              className={`${
+                index === currentSlide ? "opacity-100" : "opacity-0"
+              } absolute top-0 left-0 w-full h-full  object-cover object-center transition-opacity duration-1000 `}
             />
           ))}
           <Button
@@ -94,9 +136,7 @@ function ShoppingHome() {
           </Button>
           <Button
             onClick={() =>
-              setCurrentSlide(
-                (prevSlide) => (prevSlide + 1) % slides.length
-              )
+              setCurrentSlide((prevSlide) => (prevSlide + 1) % slides.length)
             }
             variant="outline"
             size="icon"
@@ -113,6 +153,9 @@ function ShoppingHome() {
             <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-5 gap-4">
               {categoriesWithIcon.map((categoryItem) => (
                 <Card
+                  onClick={() =>
+                    handleNavigateToListingPage(categoryItem, "category")
+                  }
                   key={categoryItem.id}
                   className="cursor-pointer hover:shadow-lg transition-shadow"
                 >
@@ -122,7 +165,7 @@ function ShoppingHome() {
                   </CardContent>
                 </Card>
               ))}
-             
+
               {/* {
                 brandsWithIcon.map((category) => {
                   const IconComponent = category.icon;
@@ -142,7 +185,7 @@ function ShoppingHome() {
             </div>
           </div>
         </section>
-          <section className="py-12 bg-gray-50 ">
+        <section className="py-12 bg-gray-50 ">
           <div className="container mx-auto px-4 ">
             <h2 className="text-3xl font-bold text-center mb-8 ">
               Shop by Brand
@@ -150,6 +193,9 @@ function ShoppingHome() {
             <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-6 gap-4">
               {brandsWithIcon.map((brandItem) => (
                 <Card
+                 onClick={() =>
+                    handleNavigateToListingPage(brandItem, "brand")
+                  }
                   key={brandItem.id}
                   className="cursor-pointer hover:shadow-lg transition-shadow"
                 >
@@ -159,7 +205,7 @@ function ShoppingHome() {
                   </CardContent>
                 </Card>
               ))}
-              </div>
+            </div>
           </div>
         </section>
         <section className="py-12">
@@ -167,16 +213,26 @@ function ShoppingHome() {
             <h2 className="text-3xl font-bold text-center mb-8">
               Featured Products
             </h2>
-            <div className="grid grid-col-1 sm:grid-cols-3 lg:grid-cols-4 gap-6"> 
-            {
-              products && products.length > 0 ? 
-              products.map(productItem => <ShoopingProductTile
-                product = {productItem}
-              />):<p>No products found.</p>
-            }
+            <div className="grid grid-col-1 sm:grid-cols-3 lg:grid-cols-4 gap-6">
+              {products && products.length > 0 ? (
+                products.map((productItem) => (
+                  <ShoopingProductTile 
+                  handleGetProductDetails={handleGetProductDetails}
+                  product={productItem} 
+                  handleAddToCart={handleAddToCart}
+                  />
+                ))
+              ) : (
+                <p>No products found.</p>
+              )}
             </div>
           </div>
         </section>
+        <ProductDetailsDialog
+          open={openDetailsDialog}
+          setOpen={setOpenDetailsDialog}
+          productDetails={productDetails}
+        />
       </div>
     </>
   );
