@@ -64,6 +64,7 @@ const editAddress = async (req, res) => {
   try {
 
     const { userId, addressId } = req.params;
+    const formData = req.body;
      if (!userId || !addressId) {
        return res.status(400).json({
          success: false,
@@ -99,6 +100,7 @@ const editAddress = async (req, res) => {
 const deleteAddress = async (req, res) => {
   try {
     const { userId, addressId } = req.params;
+    
      if (!userId || !addressId) {
        return res.status(400).json({
          success: false,
